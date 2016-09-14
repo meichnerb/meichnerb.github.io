@@ -1,0 +1,35 @@
+body {
+  margin:20px;
+  background-color: white;
+}
+
+.header {
+  margin:20px;
+  margin-bottom:0;
+}
+h1 {
+  font-family: "Arial";
+  font-weight: 500;
+  margin:0;
+  color:slategrey;
+}
+.sub-header {
+  font-family: "Arial";
+  font-weight: 200;
+  margin:5px 20px;
+  color: grey;
+  border-bottom:1px solid lightsteelblue;
+  padding-bottom:5px;
+
+}
+.info {
+    margin: 50px 20px;
+    font-family: "arial";
+    color: grey;
+    width: 66%;
+    font-size: 15px;
+}
+a {
+  color:darkblue;
+  text-decoration: none;
+}
