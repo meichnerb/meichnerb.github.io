@@ -1,3 +1,8 @@
+---
+---
+
+$neu: #cc0000;
+
 body {
   margin:20px;
   background-color: white;
@@ -20,16 +25,33 @@ h1 {
   color: grey;
   border-bottom:1px solid lightsteelblue;
   padding-bottom:5px;
-
 }
+
 .info {
-    margin: 50px 20px;
+    margin: 35px 20px;
     font-family: "arial";
     color: grey;
     width: 66%;
     font-size: 15px;
+    span {
+      font-style: italic;
+    }
 }
+
 a {
   color:darkblue;
   text-decoration: none;
+}
+.little-dot {
+  color: rgba(255, 255, 255, 0.5);
+}
+.kandinsky {
+  height:510px;
+  width:1296px;
+}
+.inner-circle {
+  left: 313px;
+  top: 757px;
+  transform: rotate(-16deg);
+  position:absolute;
 }
