@@ -1,0 +1,113 @@
+// var svg = d3.select("svg");
+// var circle = svg.select("circle");
+// var button = d3.select("button");
+// button.on("click", function(){
+//   circle.attr("fill","red");
+// });
+
+
+//   d3.csv("greenhouse.csv", function(file) {
+//     console.log(file);
+//   });
+//
+// var randomData = function() {
+//   var randomArray = [];
+//   var num = Math.ceil(Math.random() * 5);
+//   for (var i = 0; i < num; i++) {
+//     randomArray.push(Math.random() * 50);
+//   }
+//   return randomArray;
+// }
+//
+// var arr = [23, 54, 34];
+//
+// var svg = d3.select("body").append("svg")
+//   .attr("width",800)
+//   .attr("height",500);
+//
+// var draw = function() {
+//
+//   var data = randomData();
+//   console.log(data);
+//
+//   var circles = svg.selectAll("circle")
+//     .data(data);
+//
+//   circles.enter()
+//     .append("circle")
+//     .attr("fill", "yellow")
+//     .attr("cx", function(d, i){return 60 + (120 * i);})
+//     .attr("cy",60)
+//     .transition().duration(500)
+//     .attr("r", function(d){
+//       return d;
+//     });
+//
+//     circles
+//       .transition().duration(500)
+//         .attr("fill", "green")
+//       .transition().duration(500)
+//         .attr("r", function(d){
+//           return d;
+//         });
+//
+//     circles.exit()
+//       .transition().duration(500)
+//       .attr("r", 0)
+//       .attr("fill", "red")
+//       .remove();
+//
+// }
+// draw(arr);
+
+
+// var draw = function(data) {
+//
+//   var svg = d3.select("svg");
+//
+//   var circles = svg.selectAll("circle").data(data);
+//
+//   var dataExtent = d3.extent(data, function(d, i) {
+//     return d.values.length;
+//   });
+//
+//   console.log(dataExtent);
+//
+//   var fart = d3.scaleLinear()
+//     .domain(dataExtent)
+//     .range([25, 50]);
+//
+//   // console.log(fart(517));
+//
+//   circles.enter().append("circle")
+//     .attr("cy", 60)
+//     .attr("cx", function(d, i) {
+//       return 60 + (120 * (i % 5));
+//     })
+//     .attr("r", function(d, i) {
+//       return fart(d.values.length);
+//     });
+//
+// };
+//
+// d3.csv("greenhouse.csv", function(error, data) {
+//
+//   data = data.filter(function(d, i) {
+//     return i != 0;
+//   });
+//
+//   var nestedData = d3.nest()
+//     .key(function(d, i) {
+//       return d.Gender;
+//     })
+//     .entries(data);
+//
+//   // nestedData = nestedData.filter(function(d, i) {
+//   //   return d.key != "";
+//   // });
+//
+//   console.log(nestedData);
+//
+//   draw(nestedData);
+//
+// });

@@ -2,73 +2,93 @@
 layout: default
 author: Bayley
 ---
-<!--
-<div class="button" id="button">
-    <button type="button">Click Me</click>
-</div> -->
 <div>
-  <!-- <svg height=500 width=500> -->
-    <!-- <circle id="circle" cx="187px" cy="195px" r="135px" fill="black" /> -->
-  <!-- </svg> -->
+  <label for="year">Year</label>
+  <input type="range" id="slider">
+  <input type="text" id="textbox">
 </div>
+  <svg height=600 width=600></svg>
+
 <script>
 
-  // var svg = d3.select("svg");
-  // var circle = svg.select("circle");
-  // var button = d3.select("button");
-  // button.on("click", function(){
-  //   circle.attr("fill","red");
-  // });
+    var years = [];
 
-  var randomData = function() {
-    var randomArray = [];
-    var num = Math.ceil(Math.random() * 5);
-    console.log("num", num);
-    for (var i = 0; i < num; i++) {
-      randomArray.push(Math.random() * 50);
-    }
-    return randomArray;
-  }
+    var draw = function(data, year){
+        var afg = data[0];
 
-  var arr = [23, 54, 34];
+        var values = years.map(function(y) {
+          return (afg[y + " [YR" + y + "]"])
+        });
 
-  var svg = d3.select("body").append("svg")
-    .attr("width",800)
-    .attr("height",500);
+        var radius = d3.scaleLinear()
+          .domain(d3.extent(values))
+          .range([10, window.innerWidth / 2 - 10]);
 
-  var draw = function() {
+        var svg = d3.select("svg");
+        var circle = svg.selectAll("circle")
+          .data([afg]);
 
-    var data = randomData();
-    console.log(data);
+        var enter = circle.enter().append("circle");
 
-    var circles = svg.selectAll("circle")
-      .data(data);
-
-    circles.enter()
-      .append("circle")
-      .attr("fill", "yellow")
-      .attr("cx", function(d, i){return 60 + (120 * i);})
-      .attr("cy",60)
-      .transition().duration(500)
-      .attr("r", function(d){
-        return d;
-      });
-
-      circles
-        .transition().duration(500)
-          .attr("fill", "green")
-        .transition().duration(500)
+        circle.merge(enter)
+          .attr("cx", window.innerWidth / 2)
+          .attr("cy", window.innerWidth / 2)
+          .transition().duration(500)
+          .attr("fill", function(d){
+            var num = afg[year + " [YR" + year + "]"];
+            if (isNaN(parseFloat(num))) {
+              return "#cccccc";
+            }
+            return "green";
+          })
           .attr("r", function(d){
-            return d;
+            var num = afg[year + " [YR" + year + "]"];
+            if (isNaN(parseFloat(num))) {
+              return 30;
+            }
+            return radius(num);
           });
 
-      circles.exit()
-        .transition().duration(500)
-        .attr("r", 0)
-        .attr("fill", "red")
-        .remove();
+        console.log(year, afg[year + " [YR" + year + "]"]);
+        console.log(years);
+    };
 
-  }
-  draw(arr);
+    d3.csv("greenhouse.csv", function(error, data){
+
+      data.forEach(function(d, i){
+        for (var key in d) {
+
+          var num = parseFloat(d[key]);
+          if (!isNaN(num)) {
+            d[key] = num;
+          }
+
+        }
+      });
+
+
+      for (var key in data[0]) {
+        var num = parseFloat(key.split(" ")[0]);
+        if (!isNaN(num)){
+          years.push(num);
+        }
+
+      }
+      var defaultValue = d3.min(years);
+
+      d3.select("#slider")
+        .attr("min", d3.min(years))
+        .attr("max", d3.max(years))
+        .attr("value", defaultValue)
+        .on("input", function(){
+          d3.select("#textbox").node().value = this.value;
+          draw(data, this.value);
+        });
+
+        draw(data, d3.min(years));
+
+    });
+
+
 
 </script>
