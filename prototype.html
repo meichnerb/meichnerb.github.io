@@ -1,0 +1,158 @@
+---
+layout: default
+author: Bayley
+---
+
+<div class="map-background" width="100%">
+  <div class="map">
+    <svg class="world-map" id="world-map" width="1500" height="200"></svg>
+    <div>
+      <label for="year">Year</label>
+      <input type="range" id="slider">
+      <input type="textbox" id="textbox">
+    </div>
+  </div>
+<div>
+  <script>
+
+      var years = [];
+      var country = [];
+      var rows = [];
+
+      d3.text("greenhouse.csv", function(text) {
+
+        var row = d3.csvParseRows(text).map(function(row) {
+          return row.map(function(value) {
+            return +value;
+          });
+        });
+        console.log(row);
+
+        var draw = function(data, year){
+
+
+          var values = years.map(function(y) {
+            return (row[y + " [YR" + y + "]"])
+          });
+
+          for (var key in data) {
+            var num = parseFloat(key.split(" "));
+            if (!isNaN(num)){
+              years.push(num);
+            }
+          }
+
+          var defaultValue = d3.min(years);
+
+          d3.select("#slider")
+            .attr("min", d3.min(years))
+            .attr("max", d3.max(years))
+            .attr("value", defaultValue)
+            .on("input", function(){
+              d3.select("#textbox").node().value = this.value;
+              draw(data, this.value);
+            });
+
+
+          var svg = d3.select("svg");
+          var circle = svg.selectAll("circle")
+            .data(data);
+
+          var enter = circle.enter().append("circle");
+          var color = d3.scaleLinear()
+            .domain(["11000", "11500", "12000"])
+            .range(["#354e35", "#356e35" , "#359e35"]);
+
+
+          var cx = function(d, i){return 60 + (50 * i);};
+
+
+          circle.merge(enter)
+            .attr("cx", cx)
+            .transition().duration(500)
+            .attr("fill", function(d) {
+              if (isNaN(parseFloat(d))) {
+                return "#cccccc";
+              }
+              else {
+                return color(parseFloat(d));
+              }
+            })
+            .attr("r", "20");
+
+            draw(data, d3.min(years));
+          };
+        });
+
+
+
+
+
+
+    //   d3.csv("greenhouse.csv", function(error, data){
+    //
+    //
+    //
+    //       var countryName = data.map(function(d){
+    //           return d["Country Name"];
+    //       });
+    //       console.log(countryName);
+    //       //
+    //       // var yearData = data.map(function(d){
+    //       //     return d["1990 [YR1990]", "1991 [YR1991]", "1992 [YR1992]", "1993 [YR1993]",
+    //       //     "1994 [YR1994]", "1995 [YR1995]", "1996 [YR1996]", "1997 [YR1997]", "1998 [YR1998]",
+    //       //     "1999 [YR1999]", "2000 [YR2000]", "2001 [YR2001]", "2002 [YR2002]", "2003 [YR2003]",
+    //       //     "2004 [YR2004]", "2005 [YR2005]", "2006 [YR2006]", "2007 [YR2007]", "2008 [YR2008]",
+    //       //     "2009 [YR2009]"];
+    //       // });
+    //
+    //
+    //       var ninety = data.map(function(d){
+    //           return d["1990 [YR1990]"];
+    //       });
+    //       var ninetyOne = data.map(function(d){
+    //           return d["1991 [YR1991]"];
+    //       });
+    //       var ninetyTwo = data.map(function(d){
+    //           return d["1992 [YR1992]"];
+    //       });
+    //       var ninetyThree = data.map(function(d){
+    //           return d["1993 [YR1993]"];
+    //       });
+    //       var ninetyFour = data.map(function(d){
+    //           return d["1994 [YR1994]"];
+    //       });
+    //       var ninetyFive = data.map(function(d){
+    //           return d["1995 [YR1995]"];
+    //       });
+    //       var ninetySix = data.map(function(d){
+    //           return d["1996 [YR1996]"];
+    //       });
+    //       var ninetySeven = data.map(function(d){
+    //           return d["1997 [YR1997]"];
+    //       });
+    //       var ninetyEight = data.map(function(d){
+    //           return d["1998 [YR1998]"];
+    //       });
+    //       var ninetyNine = data.map(function(d){
+    //           return d["1999 [YR1999"];
+    //       });
+    //       var thousand = data.map(function(d){
+    //           return d["2000 [YR2000]"];
+    //       });
+    //       var thousandOne = data.map(function(d){
+    //           return d["2001 [YR2001]"];
+    //       });
+    //
+    //       var yearData = [ninety, ninetyOne, ninetyTwo, ninetyThree, ninetyFour,
+    //                       ninetyFive, ninetySix, ninetySeven, ninetyEight, ninetyNine,
+    //                       thousand, thousandOne];
+    //       // console.log(yearData);
+    //
+    //
+    //
+    // });
+
+
+
+  </script>
