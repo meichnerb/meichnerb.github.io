@@ -3,55 +3,68 @@ layout: default
 author: Bayley
 ---
 <div>
-  <label for="year">Year</label>
-  <input type="range" id="slider">
+  <label for="year" style="padding-left: 20px; padding-top:20px">Year</label>
+  <input type="range" id="slider" style="margin:20px;">
   <input type="text" id="textbox">
 </div>
-  <svg height=600 width=600></svg>
+  <svg height=1000 width=1000></svg>
 
 <script>
 
     var years = [];
 
     var draw = function(data, year){
-        var afg = data[0];
+        // var afg = data[0];
 
-        var values = years.map(function(y) {
-          return (afg[y + " [YR" + y + "]"])
+        var values =  d3.extent(function(d) {
+          return d[year + " [YR" + year + "]"];
         });
 
-        var radius = d3.scaleLinear()
-          .domain(d3.extent(values))
-          .range([10, window.innerWidth / 2 - 10]);
+        console.log(values);
+
+        var countryNames = data.map(function(d) {
+          return d["Country Name"];
+        });
+
+        // // var dataMin = d3.min(data, function(d, i) {
+        // // 			return values;
+        // // });
+        // console.log(dataMin);
+
+        var color = d3.scaleOrdinal()
+          .domain(values)
+          .range(["#012301", "#08f908"]);
 
         var svg = d3.select("svg");
         var circle = svg.selectAll("circle")
-          .data([afg]);
+          .data(data);
 
         var enter = circle.enter().append("circle");
 
-        circle.merge(enter)
-          .attr("cx", window.innerWidth / 2)
-          .attr("cy", window.innerWidth / 2)
-          .transition().duration(500)
-          .attr("fill", function(d){
-            var num = afg[year + " [YR" + year + "]"];
-            if (isNaN(parseFloat(num))) {
-              return "#cccccc";
-            }
-            return "green";
-          })
-          .attr("r", function(d){
-            var num = afg[year + " [YR" + year + "]"];
-            if (isNaN(parseFloat(num))) {
-              return 30;
-            }
-            return radius(num);
-          });
+        var cx = function(d, i) {
+          return 30 + (30*(i%25));
+        };
 
-        console.log(year, afg[year + " [YR" + year + "]"]);
-        console.log(years);
+        var cy = function(d, i) {
+          return 30 + (30 * Math.floor(i/25))
+        };
+
+        circle.merge(enter).data(data)
+          .attr("cx", cx)
+          .attr("cy", cy)
+          .transition().duration(500)
+          .attr("fill", function(d) {
+            var num = d[year + "[YR" + year + "]"];
+              if (isNaN(parseFloat(num))) {
+                return "#cccccc";
+              }
+              else {
+                return color(parseFloat(num));
+              }
+            })
+          .attr("r", 10);
     };
+
 
     d3.csv("greenhouse.csv", function(error, data){
 
