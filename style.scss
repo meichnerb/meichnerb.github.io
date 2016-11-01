@@ -4,9 +4,8 @@
 $neu: #cc0000;
 
 body {
-  width:100%;
-  height:100%;
-  margin:0;
+  margin:20px;
+  background-color: white;
 }
 
 .header {
@@ -55,11 +54,4 @@ a {
   top: 757px;
   transform: rotate(-16deg);
   position:absolute;
-}
-
-.map-background {
-  height:100%;
-  width:100%;
-  background-color: #5d5d5d;
-  padding-bottom: 20px;
 }
