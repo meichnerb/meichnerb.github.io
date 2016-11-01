@@ -20,7 +20,6 @@ author: Bayley
 	var years = [];
 	d3.csv("greenhouse.csv", function(error, parsed){
 
-		console.log(parsed[0]);
 		for (var key in parsed[0]) {
 			var num = parseFloat(key.split(" ")[0]);
 			if (!isNaN(num)){
@@ -82,7 +81,6 @@ author: Bayley
 
 	});
 
-	console.log("Finished Parse:", AllData);
 
 
 	d3.select("#slider")
@@ -106,7 +104,6 @@ var DrawCountries = function(year){
 
 	year = year - firstYear;
 
-	console.log('Drawing Data for year ', year);
 
 
 	// -- Begin Circles
@@ -129,7 +126,6 @@ var DrawCountries = function(year){
 			.attr("fill", getCircleColor)
 			.attr("r", 10);
 
-			console.log("finish draw");
 
 	// -- Find Circle Color
 		function getCircleColor(d){
