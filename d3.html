@@ -2,107 +2,168 @@
 layout: default
 author: Bayley
 ---
+
 <div>
   <label for="year" style="padding-left: 20px; padding-top:20px">Year</label>
   <input type="range" id="slider" style="margin:20px;">
   <input type="text" id="textbox">
 </div>
-  <svg height=1000 width=1000></svg>
+
+<svg height=1000 width=1000></svg>
 
 <script>
 
-    var years = [];
+// ------------
+//    Parse
+// ------------
 
-    var draw = function(data, year){
-        // var afg = data[0];
+	var years = [];
+	d3.csv("greenhouse.csv", function(error, parsed){
 
-        var values =  d3.extent(function(d) {
-          return d[year + " [YR" + year + "]"];
-        });
+		console.log(parsed[0]);
+		for (var key in parsed[0]) {
+			var num = parseFloat(key.split(" ")[0]);
+			if (!isNaN(num)){
+			  years.push(num);
+			}
+		}
 
-        console.log(values);
+		firstYear = d3.min(years);
+		d3.select("#slider")
+			.attr("min", d3.min(years))
+			.attr("max", 2012) //d3.max(years))
+			.attr("value", d3.min(years));
 
-        var countryNames = data.map(function(d) {
-          return d["Country Name"];
-        });
-
-        // // var dataMin = d3.min(data, function(d, i) {
-        // // 			return values;
-        // // });
-        // console.log(dataMin);
-
-        var color = d3.scaleOrdinal()
-          .domain(values)
-          .range(["#012301", "#08f908"]);
-
-        var svg = d3.select("svg");
-        var circle = svg.selectAll("circle")
-          .data(data);
-
-        var enter = circle.enter().append("circle");
-
-        var cx = function(d, i) {
-          return 30 + (30*(i%25));
-        };
-
-        var cy = function(d, i) {
-          return 30 + (30 * Math.floor(i/25))
-        };
-
-        circle.merge(enter).data(data)
-          .attr("cx", cx)
-          .attr("cy", cy)
-          .transition().duration(500)
-          .attr("fill", function(d) {
-            var num = d[year + "[YR" + year + "]"];
-              if (isNaN(parseFloat(num))) {
-                return "#cccccc";
-              }
-              else {
-                return color(parseFloat(num));
-              }
-            })
-          .attr("r", 10);
-    };
+	});
 
 
-    d3.csv("greenhouse.csv", function(error, data){
+
+	var RANGE = [100000000, -100000000];
+	var AllData;
+	var firstYear;
+	d3.csv("greenhouse.csv", function(error, parsed){
+
+		if(!AllData)AllData = [];
+
+		parsed.forEach(function(row, index){
+
+			if(!row["Country Name"])return false;
+			//if(index>7)return false;
 
 
-      data.forEach(function(d, i){
-        for (var key in d) {
+			var yearlyData = [];
 
-          var num = parseFloat(d[key]);
-          if (!isNaN(num)) {
-            d[key] = num;
-          }
+			var ii = 0;
+			for (var key in row) {
+				if ( ii >= 4) {
+					var polution = Number(row[key]);
 
-        }
-      });
+					if(isNaN(polution))polution = null;
+					yearlyData.push(polution);
+
+					if(polution){
+						if(polution < RANGE[0]) RANGE[0] = polution;
+						if(polution > RANGE[1]) RANGE[1] = polution;
+
+						RANGE[1] = Math.min(1000000, RANGE[1]);
+					}
+
+					if(ii == 11){
+						yearlyData.push(null);
+						yearlyData.push(null);
+					}
+					if(ii == 12)yearlyData.push(null);
+				}
+				ii += 1;
+			}
+
+			AllData.push( {name: row['Country Name'], years: yearlyData} );
+		});
+
+	});
+
+	console.log("Finished Parse:", AllData);
 
 
-      for (var key in data[0]) {
-        var num = parseFloat(key.split(" ")[0]);
-        if (!isNaN(num)){
-          years.push(num);
-        }
-
-      }
-      var defaultValue = d3.min(years);
-
-      d3.select("#slider")
-        .attr("min", d3.min(years))
-        .attr("max", d3.max(years))
-        .attr("value", defaultValue)
-        .on("input", function(){
-          d3.select("#textbox").node().value = this.value;
-          draw(data, this.value);
-        });
-
-        draw(data, d3.min(years));
-
-    });
+	d3.select("#slider")
+		.on("input", function(){
+			d3.select("#textbox").node().value = this.value;
+			DrawCountries(this.value);
+		});
 
 
+
+
+
+// -------------
+//      Draw
+// --------------
+
+var colours = ["#6373FF", "#63FFFB", "#7BFF63","#FBFF63","#FF8363", "#FF0000"];
+
+var DrawCountries = function(year){
+	if(!AllData)return console.error("Data not defined yet; cannot draw");
+
+	year = year - firstYear;
+
+	console.log('Drawing Data for year ', year);
+
+
+	// -- Begin Circles
+		var svg = d3.select("svg");
+		var circle = svg.selectAll("circle").data(AllData);
+		var enter = circle.enter().append("circle");
+		var cx = function(d, i) {        return 30 + (30*(i%25));      };
+		var cy = function(d, i) {        return 30 + (30 * Math.floor(i/25))      };
+		var color = d3.scaleOrdinal()
+						  .domain([0,6])
+						  //.range(["#012301", "05d823", "04af1c", "#08f908"]);
+						  .range(colours);
+
+
+	// -- Do Circle Logic
+		circle.merge(enter)
+			.attr("cx", cx)
+			.attr("cy", cy)
+			.transition().duration(500)
+			.attr("fill", getCircleColor)
+			.attr("r", 10);
+
+			console.log("finish draw");
+
+	// -- Find Circle Color
+		function getCircleColor(d){
+
+			// -- Get Polution
+				var polution = d.years[year];
+				if(!polution)return "#cccccc";
+
+			// -- Get Log Value And Color
+				var logValue = Math.floor(Math.log10(polution));
+				console.log("polution: ", polution, 'log: ', logValue);
+				return color(logValue);
+
+			// -- Alternative Color Test
+				/*var percent = logValue/6;
+				var color = "rgba("+Math.round(percent*255)+",0,0)";
+				return color;*/
+		}
+};
+
+
+
+/*
+Notes...
+
+var polution;
+
+
+1 - 10,000 = blue
+10,000 - 100,000 = green
+100,000 - 1,000,000 = orange
+1,000,000 - 10,000,000 = red
+10,000,000 - 100,000,000 = black
+
+*/
 
 </script>
