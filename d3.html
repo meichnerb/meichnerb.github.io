@@ -9,7 +9,7 @@ author: Bayley
   <input type="text" id="textbox">
 
 
-<svg height=300 width=65%></svg>
+<svg height=600 width=75%></svg>
 
 <div class="sidebar">
   <div class="country-info">
@@ -24,6 +24,7 @@ author: Bayley
 </div>
 
 <script src="https://d3js.org/d3-axis.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
 
 <script>
 
@@ -55,7 +56,10 @@ author: Bayley
 	var AllData;
 	var firstYear;
   var countryName = [];
-  var yearDATA = [];
+  var yearlyData = [];
+  var width = 900, height = 500;
+
+
 	d3.csv("greenhouse.csv", function(error, parsed){
 
 		if(!AllData)AllData = [];
@@ -123,6 +127,8 @@ author: Bayley
 
 var colours = ["#00ff00", "#00cc00", "#009900", "#006600", "#003300", "#000000"];
 
+
+
 var DrawCountries = function(year){
 	if(!AllData)return console.error("Data not defined yet; cannot draw");
 
@@ -133,6 +139,7 @@ var DrawCountries = function(year){
 	// -- Begin Circles
 		var svg = d3.select("svg");
 		var circle = svg.selectAll("circle").data(AllData);
+    var g = svg.append("g");
 		var enter = circle.enter().append("circle");
 		var cx = function(d, i) {        return 30 + (30*(i%25));      };
 		var cy = function(d, i) {        return 30 + (30 * Math.floor(i/25))      };
@@ -141,17 +148,54 @@ var DrawCountries = function(year){
 						  .range(colours);
 
 
+    var amount = AllData.length;
+    console.log(amount);
+
+
+    d3.json("world.json", function(error, data){
+
+    // converts Topojson to GeoJSON
+    console.log(data);
+    // make sure to use the right key in data.objects!
+    var featureCollection = topojson.feature(data, data.objects.countries);
+
+    // console.log(featureCollection);
+
+    // filter out countries using id!
+    featureCollection.features = featureCollection.features.filter(function(d) {
+      return d.id != "010";
+    });
 
 
 
-	// -- Do Circle Logic
-		circle.merge(enter)
-      .attr("id", "circle")
-			.attr("cx", cx)
-			.attr("cy", cy)
-			.transition().duration(500)
-			.attr("fill", getCircleColor)
-			.attr("r", 10)
+    featureCollection.features.forEach(function(d, i) {
+
+        var newCode = [d.id].push(AllData['Country Code']);
+
+        console.log(newCode);
+    });
+
+    // initializes a map projection
+    // projection types: https://github.com/d3/d3-geo#azimuthal-projections
+    var proj = d3.geoMercator()
+        .fitSize([width, height], featureCollection);
+
+    // creates a path generator
+    var path = d3.geoPath()
+      .projection(proj);
+
+    var countries = svg.selectAll("path")
+      .data(featureCollection.features);
+
+
+
+    // country codes: https://en.wikipedia.org/wiki/ISO_3166-1_numeric
+    countries.enter().append("path")
+      .attr("d", path)
+      .attr("stroke", "#888")
+      .attr("stroke-width", 1)
+      .attr("fill", getCircleColor)
+      .attr("r", 10)
       .attr("class", function(d){
         return d.name;
       })
@@ -159,26 +203,58 @@ var DrawCountries = function(year){
         document.getElementById('Name').innerHTML = d.name;
         document.getElementById('code').innerHTML = d.code;
 
-        console.log("working");
+        console.log(d.years);
+        console.log(years);
 
-          var axisX = d3.axisLeft(d.years);
-
-          var logValue = Math.floor(Math.log10(d.years[year]));
-          var axisY = d3.axisRight(logValue);
-
-          d3.select("#data").append("svg")
-            .attr("class", "axis")
-            .attr("width", 1440)
-            .attr("height", 30)
-            // .call(axisX)
-            ;
+        d3.select("#data").append("svg")
+          .attr("class", "svg2");
 
 
-          var line = d3.line()
-            .x(function(d) { return x(d.years); })
-            .y(function(d) { return y(d.years[year]); });
+        var svg = d3.select(".svg2"),
+          margin = {top: 20, right: 20, bottom: 30, left: 40},
+          width = +svg.attr("width") - margin.left - margin.right,
+          height = +svg.attr("height") - margin.top - margin.bottom;
+
+        var logValue = Math.floor(Math.log10(d.years));
+
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+            y = d3.scaleLinear().rangeRound([height, 0]);
+
+        var g = svg.append("g")
+          .attr("transform", "translate(70,100)");
+
+          x.domain([d3.min(years), d3.max(years)]);
+          y.domain([d3.min(d.years), d3.max(d.years)]);
+
+          g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("style", "width: 100px")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+          g.append("g")
+            .attr("class", "axis axis--y")
+            .attr("style", "height: 100px")
+            .call(d3.axisLeft(y).ticks(12))
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text("Year");
+
+          g.selectAll(".bar")
+            .data(AllData)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(logValue); })
+            .attr("y", function(d) { return y(years); })
+            .attr("width", 20)
+            .attr("height", function(d) { return logValue });
+
 
       });
+
 
 
 
@@ -201,7 +277,7 @@ var DrawCountries = function(year){
 				return color;*/
 		}
 
-
+  });
 
 };
 
