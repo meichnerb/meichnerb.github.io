@@ -33,6 +33,7 @@ author: Bayley
 // ------------
 
 	var years = [];
+  var year;
 	d3.csv("greenhouse.csv", function(error, parsed){
 
 		for (var key in parsed[0]) {
@@ -66,10 +67,11 @@ author: Bayley
 
 		parsed.forEach(function(row, index){
 
+      var yearData = {};
+
 			if(!row["Country Name"])return false;
 			//if(index>7)return false;
       if(row["Country Name"])
-        // console.log(row["Country Name"]);
         countryName.push(row["Country Name"]);
 
 
@@ -81,6 +83,8 @@ author: Bayley
 
 					if(isNaN(pollution))pollution = null;
 					yearlyData.push(pollution);
+
+          yearData[key.split(" ")[0]] = pollution;
 
 
 					if(pollution){
@@ -100,7 +104,7 @@ author: Bayley
 
 			}
 
-			AllData[row['Country Code']] = {name: row['Country Name'], years: yearlyData, code: row['Country Code']};
+			AllData[row['Country Code']] = {name: row['Country Name'], years: yearData, code: row['Country Code']};
 
 		});
 
@@ -126,10 +130,10 @@ var colours = ["#00ff00", "#00cc00", "#009900", "#006600", "#003300", "#000000"]
 
 
 
-var DrawCountries = function(year){
+var DrawCountries = function(y){
 	if(!AllData)return console.error("Data not defined yet; cannot draw");
 
-	year = year - firstYear;
+	year = y;
 
 
 
@@ -145,8 +149,6 @@ var DrawCountries = function(year){
 						  .range(colours);
 
 
-    var amount = AllData.length;
-    console.log(AllData);
 
 
 
@@ -156,22 +158,15 @@ var DrawCountries = function(year){
     d3.json("world.json", function(error, data){
 
     // converts Topojson to GeoJSON
-    // console.log(data);
     // make sure to use the right key in data.objects!
     var featureCollection = topojson.feature(data, data.objects.countries);
 
-
-
-    // console.log(featureCollection);
 
     // filter out countries using id!
     featureCollection.features = featureCollection.features.filter(function(d) {
       return d.id != "010";
 
     });
-
-
-  // console.log(featureCollection.features);
 
 
     // initializes a map projection
@@ -186,32 +181,34 @@ var DrawCountries = function(year){
     var countries = svg.selectAll("path")
       .data(featureCollection.features);
 
-        function getCircleColor(d){
 
-          // -- Get pollution
-          var num2alpha = {"100":"BGR","104":"MMR","108":"BDI","112":"BLR","116":"KHM","120":"CMR","124":"CAN","129":"XXA","132":"CPV","136":"CYM","140":"CAF","144":"LKA","148":"TCD","152":"CHL","156":"CHN","158":"TWN","162":"CXR","166":"CCK","170":"COL","174":"COM","175":"MYT","178":"COG","180":"COD","184":"COK","188":"CRI","191":"HRV","192":"CUB","196":"CYP","200":"CZE","204":"BEN","208":"DNK","212":"DMA","214":"DOM","218":"ECU","221":"XXA","222":"SLV","226":"GNQ","231":"ETH","232":"ERI","233":"EST","234":"FRO","238":"FLK","239":"SGS","242":"FJI","246":"FIN","250":"FRA","254":"GUF","258":"PYF","260":"ATF","262":"DJI","266":"GAB","268":"GEO","270":"GMB","275":"PSE","276":"DEU","278":"DDR","280":"FDR","288":"GHA","290":"XXB","292":"GIB","296":"KIR","300":"GRC","304":"GRL","308":"GRD","312":"GLP","316":"GUM","320":"GTM","324":"GIN","328":"GUY","332":"HTI","334":"HMD","336":"VAT","340":"HND","344":"HKG","348":"HUN","352":"ISL","360":"IDN","364":"IRN","368":"IRQ","372":"IRL","376":"ISR","380":"ITA","384":"CIV","388":"JAM","392":"JPN","398":"KAZ","400":"JOR","404":"KEN","408":"PRK","410":"KOR","412":"KSV","414":"KWT","417":"KGZ","418":"LAO","422":"LBN","426":"LSO","428":"LVA","430":"LBR","434":"LBY","438":"LIE","440":"LTU","442":"LUX","446":"MAC","450":"MDG","454":"MWI","458":"MYS","462":"MDV","466":"MLI","470":"MLT","471":"XXB","473":"XXA","474":"MTQ","478":"MRT","480":"MUS","484":"MEX","488":"MID","490":"XXB","492":"XXB","496":"MNG","498":"MDA","499":"MNE","500":"MSR","504":"MAR","508":"MOZ","512":"OMN","516":"NAM","520":"NRU","524":"NPL","527":"XXA","528":"NLD","530":"ANT","531":"CUW","532":"NAA","533":"ABW","534":"MAF","535":"BES","536":"XXE","540":"NCL","548":"VUT","554":"NZL","558":"NIC","562":"NER","566":"NGA","568":"XXC","570":"NIU","574":"NFK","577":"XXA","578":"NOR","580":"MNP","581":"XXB","582":"PCI","583":"FSM","584":"MHL","585":"PLW","586":"PAK","591":"PAN","592":"PCZ","598":"PNG","600":"PRY","604":"PER","608":"PHL","612":"PCN","616":"POL","620":"PRT","624":"GNB","626":"TLS","630":"PRI","634":"QAT","636":"XXC","637":"XXD","638":"REU","642":"ROU","643":"RUS","646":"RWA","652":"BLM","654":"SHN","658":"KNA","660":"AIA","662":"LCA","666":"SPM","670":"VCT","674":"SMR","678":"STP","682":"SAU","686":"SEN","688":"SRB","690":"SYC","694":"SLE","697":"XXD","699":"IND","702":"SGP","703":"SVK","704":"VNM","705":"SVN","706":"SOM","710":"ZAF","716":"ZWE","720":"YMD","724":"ESP","728":"SSD","729":"SDN","732":"ESH","740":"SUR","744":"SJM","748":"SWZ","752":"SWE","756":"CHE","760":"SYR","762":"TJK","764":"THA","768":"TGO","772":"TKL","776":"TON","780":"TTO","784":"ARE","788":"TUN","792":"TUR","795":"TKM","796":"TCA","798":"TUV","800":"UGA","804":"UKR","807":"MKD","810":"SUN","818":"EGY","826":"GBR","833":"IMN","834":"TZA","837":"XXG","838":"XXF","839":"XXI","840":"USA","850":"VIR","854":"BFA","858":"URY","860":"UZB","862":"VEN","872":"WAK","876":"WLF","879":"XXA","882":"WSM","886":"YAR","887":"YEM","890":"YUG","894":"ZMB","899":"XXH","024":"AGO","072":"BWA","012":"DZA","010":"ATA","074":"BVT","080":"XXA","004":"AFG","051":"ARM","031":"AZE","050":"BGD","048":"BHR","096":"BRN","064":"BTN","086":"IOT","008":"ALB","020":"AND","040":"AUT","056":"BEL","070":"BIH","058":"BLX","028":"ATG","044":"BHS","084":"BLZ","060":"BMU","052":"BRB","092":"VGB","016":"ASM","036":"AUS","090":"SLB","032":"ARG","068":"BOL","076":"BRA"};
-          var countryCode = num2alpha[d.id];
-          var greenhouseData = AllData[countryCode];
-          if(!greenhouseData){
-            return null;
-          }
-          console.log(greenhouseData);
-          var pollution = greenhouseData.years;
+    function getCircleColor(d){
 
 
-            if(!pollution)return "#cccccc";
+      var num2alpha = {"100":"BGR","104":"MMR","108":"BDI","112":"BLR","116":"KHM","120":"CMR","124":"CAN","129":"XXA","132":"CPV","136":"CYM","140":"CAF","144":"LKA","148":"TCD","152":"CHL","156":"CHN","158":"TWN","162":"CXR","166":"CCK","170":"COL","174":"COM","175":"MYT","178":"COG","180":"COD","184":"COK","188":"CRI","191":"HRV","192":"CUB","196":"CYP","200":"CZE","204":"BEN","208":"DNK","212":"DMA","214":"DOM","218":"ECU","221":"XXA","222":"SLV","226":"GNQ","231":"ETH","232":"ERI","233":"EST","234":"FRO","238":"FLK","239":"SGS","242":"FJI","246":"FIN","250":"FRA","254":"GUF","258":"PYF","260":"ATF","262":"DJI","266":"GAB","268":"GEO","270":"GMB","275":"PSE","276":"DEU","278":"DDR","280":"FDR","288":"GHA","290":"XXB","292":"GIB","296":"KIR","300":"GRC","304":"GRL","308":"GRD","312":"GLP","316":"GUM","320":"GTM","324":"GIN","328":"GUY","332":"HTI","334":"HMD","336":"VAT","340":"HND","344":"HKG","348":"HUN","352":"ISL","360":"IDN","364":"IRN","368":"IRQ","372":"IRL","376":"ISR","380":"ITA","384":"CIV","388":"JAM","392":"JPN","398":"KAZ","400":"JOR","404":"KEN","408":"PRK","410":"KOR","412":"KSV","414":"KWT","417":"KGZ","418":"LAO","422":"LBN","426":"LSO","428":"LVA","430":"LBR","434":"LBY","438":"LIE","440":"LTU","442":"LUX","446":"MAC","450":"MDG","454":"MWI","458":"MYS","462":"MDV","466":"MLI","470":"MLT","471":"XXB","473":"XXA","474":"MTQ","478":"MRT","480":"MUS","484":"MEX","488":"MID","490":"XXB","492":"XXB","496":"MNG","498":"MDA","499":"MNE","500":"MSR","504":"MAR","508":"MOZ","512":"OMN","516":"NAM","520":"NRU","524":"NPL","527":"XXA","528":"NLD","530":"ANT","531":"CUW","532":"NAA","533":"ABW","534":"MAF","535":"BES","536":"XXE","540":"NCL","548":"VUT","554":"NZL","558":"NIC","562":"NER","566":"NGA","568":"XXC","570":"NIU","574":"NFK","577":"XXA","578":"NOR","580":"MNP","581":"XXB","582":"PCI","583":"FSM","584":"MHL","585":"PLW","586":"PAK","591":"PAN","592":"PCZ","598":"PNG","600":"PRY","604":"PER","608":"PHL","612":"PCN","616":"POL","620":"PRT","624":"GNB","626":"TLS","630":"PRI","634":"QAT","636":"XXC","637":"XXD","638":"REU","642":"ROU","643":"RUS","646":"RWA","652":"BLM","654":"SHN","658":"KNA","660":"AIA","662":"LCA","666":"SPM","670":"VCT","674":"SMR","678":"STP","682":"SAU","686":"SEN","688":"SRB","690":"SYC","694":"SLE","697":"XXD","699":"IND","702":"SGP","703":"SVK","704":"VNM","705":"SVN","706":"SOM","710":"ZAF","716":"ZWE","720":"YMD","724":"ESP","728":"SSD","729":"SDN","732":"ESH","740":"SUR","744":"SJM","748":"SWZ","752":"SWE","756":"CHE","760":"SYR","762":"TJK","764":"THA","768":"TGO","772":"TKL","776":"TON","780":"TTO","784":"ARE","788":"TUN","792":"TUR","795":"TKM","796":"TCA","798":"TUV","800":"UGA","804":"UKR","807":"MKD","810":"SUN","818":"EGY","826":"GBR","833":"IMN","834":"TZA","837":"XXG","838":"XXF","839":"XXI","840":"USA","850":"VIR","854":"BFA","858":"URY","860":"UZB","862":"VEN","872":"WAK","876":"WLF","879":"XXA","882":"WSM","886":"YAR","887":"YEM","890":"YUG","894":"ZMB","899":"XXH","024":"AGO","072":"BWA","012":"DZA","010":"ATA","074":"BVT","080":"XXA","004":"AFG","051":"ARM","031":"AZE","050":"BGD","048":"BHR","096":"BRN","064":"BTN","086":"IOT","008":"ALB","020":"AND","040":"AUT","056":"BEL","070":"BIH","058":"BLX","028":"ATG","044":"BHS","084":"BLZ","060":"BMU","052":"BRB","092":"VGB","016":"ASM","036":"AUS","090":"SLB","032":"ARG","068":"BOL","076":"BRA"};
+      var countryCode = num2alpha[d.id];
+      var greenhouseData = AllData[countryCode];
+
+    // -- Get pollution
+
+      if(!greenhouseData){
+        return null;
+      }
+      // console.log(year, greenhouseData.years);
+      var pollution = greenhouseData.years[year];
+
+      if(!pollution)return "#cccccc";
 
           // -- Get Log Value And Color
-            var logValue = Math.floor(Math.log10(pollution));
+      var logValue = Math.floor(Math.log10(pollution));
             // console.log("pollution: ", pollution, 'log: ', logValue);
-            return color(logValue);
+      return color(logValue);
 
           // -- Alternative Color Test
             /*var percent = logValue/6;
             var color = "rgba("+Math.round(percent*255)+",0,0)";
             return color;*/
-        }
-
+    }
 
 
 
@@ -224,60 +221,18 @@ var DrawCountries = function(year){
       .attr("class", function(d){
         return AllData[name];
       })
+
       enter.on("click", function(d) {
-        document.getElementById('Name').innerHTML = d.name;
-        document.getElementById('code').innerHTML = d.code;
-
-
-
-        // d3.select("#data").append("svg")
-        //   .attr("class", "svg2");
-        //
-        //
-        // var svg = d3.select(".svg2"),
-        //   margin = {top: 20, right: 20, bottom: 30, left: 40},
-        //   width = +svg.attr("width") - margin.left - margin.right,
-        //   height = +svg.attr("height") - margin.top - margin.bottom;
-        //
-        // var logValue = Math.floor(Math.log10(d.years));
-        //
-        // var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
-        //     y = d3.scaleLinear().rangeRound([height, 0]);
-        //
-        // var g = svg.append("g")
-        //   .attr("transform", "translate(70,100)");
-        //
-        //   x.domain([d3.min(years), d3.max(years)]);
-        //   y.domain([d3.min(d.years), d3.max(d.years)]);
-        //
-        //   g.append("g")
-        //     .attr("class", "axis axis--x")
-        //     .attr("style", "width: 100px")
-        //     .attr("transform", "translate(0," + height + ")")
-        //     .call(d3.axisBottom(x));
-        //
-        //   g.append("g")
-        //     .attr("class", "axis axis--y")
-        //     .attr("style", "height: 100px")
-        //     .call(d3.axisLeft(y).ticks(12))
-        //     .append("text")
-        //     .attr("transform", "rotate(-90)")
-        //     .attr("y", 6)
-        //     .attr("dy", "0.71em")
-        //     .attr("text-anchor", "end")
-        //     .text("Year");
-        //
-        //   g.selectAll(".bar")
-        //     .data(AllData)
-        //     .enter().append("rect")
-        //     .attr("class", "bar")
-        //     .attr("x", function(d) { return x(logValue); })
-        //     .attr("y", function(d) { return y(years); })
-        //     .attr("width", 20)
-        //     .attr("height", function(d) { return logValue });
-
+        console.log("click");
+        // document.getElementById('Name').innerHTML = AllData[name];
+        // document.getElementById('code').innerHTML = d.code;
 
       });
+
+
+      countries.transition()
+       .duration(500)
+       .attr("fill", getCircleColor);
 
 
 });
