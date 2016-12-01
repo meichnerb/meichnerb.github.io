@@ -6,19 +6,28 @@ author: Bayley
 
   <div class=top-bar>
     <div class="inner-bar">
-      <label for="year" class="year">Year</label>
-      <input type="range" id="slider" style="border-radius:2px">
-      <div><p class="year-label" id="year" style="margin-left:242px; margin-top:-16px;"></p></div>
+        <header>THE GREENHOUSE GAS CRISIS</header>
+        <div class="sub-header">A comprehensive look at greenhouse gas emissions by country from 1990 to 2012</div>
+      <div style="margin-left: 264px;margin-top: -24px;">
+        <label for="year" class="year">1990</label>
+        <input type="range" id="slider" style="border-radius:2px">
+        <p class="year-label" id="year" style="margin-left:242px; margin-top:-16px;"></p>
+      </div>
+    </div>
+    <div class="range">
+      <div id="minimum"></div>
+      <div class="gradient"></div>
+      <div id="maximum"></div>
     </div>
   </div>
 
 
-<svg height=600 width=90%></svg>
+<svg height=650 width=100% style="margin-left: 2px; margin-top:50px"></svg>
 
 <div class="sidebar">
   <div class="country-info">
-    <header>Total Greenhouse Gas Emissions by Year</header>
     <p id="Name">
+      Click on a country to see data
     </p>
     <p id="code">
     </p>
@@ -96,6 +105,10 @@ author: Bayley
 						if(pollution > RANGE[1]) RANGE[1] = pollution;
 
 						RANGE[1] = Math.min(1000000, RANGE[1]);
+
+            document.getElementById('minimum').innerHTML = RANGE[0];
+            document.getElementById('maximum').innerHTML = RANGE[1] + " kt of CO2";
+
 					}
 
 					if(ii == 11){
@@ -174,11 +187,14 @@ var DrawCountries = function(y){
 
     });
 
-
+    var width  = 1020;
+    var height = 845;
     // initializes a map projection
     // projection types: https://github.com/d3/d3-geo#azimuthal-projections
     var proj = d3.geoMercator()
-        .fitSize([width, height], featureCollection);
+        .fitSize([width, height], featureCollection)
+        .scale(165)
+        .translate([width/2, height/2]);
 
     // creates a path generator
     var path = d3.geoPath()
@@ -242,8 +258,8 @@ var DrawCountries = function(y){
             return printThis; // <-- to be printed to the div
           }
         console.log("click");
-        document.getElementById('Name').innerHTML = greenhouseData.name;
-        document.getElementById('code').innerHTML = greenhouseData.code;
+        document.getElementById('Name').innerHTML = "Country: " + greenhouseData.name;
+        document.getElementById('code').innerHTML = "Country Code: " + greenhouseData.code;
         document.getElementById('data').innerHTML = print();
 
       });

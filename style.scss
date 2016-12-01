@@ -3,35 +3,43 @@
 
 $neu: #cc0000;
 
+@font-face {
+    font-family: newFont;
+    src: url(sansation_light.woff);
+}
+
 body {
   width:100%;
   height:100%;
   margin:0;
   background-color: #5d5d5d;
 }
-
-.header {
-  margin:20px;
-  margin-bottom:0;
-}
 h1 {
-  font-family: "Arial";
+  font-family: "HelveticaNeue-CondensedBold";
   font-weight: 500;
   margin:0;
   color:slategrey;
 }
 .sub-header {
-  font-family: "Arial";
+  font-family: "HelveticaNeue-CondensedBold";
   font-weight: 200;
-  margin:5px 20px;
-  color: grey;
-  border-bottom:1px solid lightsteelblue;
-  padding-bottom:5px;
+  color: lightgrey;
+  font-size: 13px;
+  width: 233px;
+  margin-left: 16px;
+  border-right: 1px solid darkgrey;
+}
+.range{
+  width:300px;
+  margin-left: 804px;
+  margin-top: -30px;
+  height: 30px;
+  border-left: 1px solid darkgrey;
 }
 
 .info {
     margin: 35px 20px;
-    font-family: "arial";
+    font-family: "HelveticaNeue-CondensedBold";
     color: grey;
     width: 66%;
     font-size: 15px;
@@ -66,12 +74,12 @@ a {
 }
 
 .sidebar {
-    position: absolute;
+    position: fixed;
     right: 2%;
     top: 60px;
     width: 200px;
     height: 400px;
-    background-color: #8abc8c;
+    background-color:#2b2d2d;
     border-radius:5px;
 }
 
@@ -83,35 +91,41 @@ input {
   margin-left:35px;
 }
 svg {
-  margin-top:60px;
+  margin-top:47px;
 }
 .year {
   color:#ffffff;
   position:absolute;
-  top:14px;
-  font-family:Helvetica;
+  top:17px;
+  font-family:"HelveticaNeue-CondensedBold";
   font-size:14px;
   width:20px;
 }
 .year-label {
-  font-family:helvetica;
+  font-family:"HelveticaNeue-CondensedBold";
   color:#ffffff;
   font-size:14px;
 }
+header {
+  padding-top:6px;
+  font-family: "HelveticaNeue-CondensedBold";
+  font-size:18px;
+  color: #ffffff;
+  position:absolute;
+  left:15px;
+}
 
 .country-info {
-  header {
-    padding-top:30px;
-    padding-left:8%;
-    font-family: helvetica;
-    font-size:16px;
-  }
+  padding-top:20px;
+
   p {
     padding-left:8%;
-    font-family: helvetica;
-    font-size:14px;
+    padding-right:8%;
+    font-family: "HelveticaNeue-CondensedBold";
+    font-size:16px;
     margin-top: 10px;
     margin-bottom: 10px;
+    color:#ffffff;
   }
 }
 .top-bar {
@@ -119,12 +133,37 @@ svg {
   height:50px;
   background-color:#2b2d2d;
   position:fixed;
-  .inner-bar{
-    -webkit-background-clip: padding-box;
-    width:250px;
-    margin:auto;
-    margin-top:13px;
+  .gradient {
+    width:200px;
+    height:20px;
+    background: -webkit-linear-gradient(left, #00ff00, #000000); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #00ff00, #000000); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #00ff00, #000000); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #00ff00, #000000); /* Standard syntax */
+    margin-top: -19px;
+    margin-left: 88px;
   }
+  .inner-bar{
+    margin-left: 249px;
+    margin-top: 9px;
+    border-left: 1px solid darkgrey;
+    height: 31px;
+  }
+}
+#minimum {
+  font-family: "HelveticaNeue-CondensedBold";
+  color: lightgrey;
+  font-size: 14px;
+  padding: 8px 0px 0px 19px;
+}
+#maximum {
+  font-family: "HelveticaNeue-CondensedBold";
+  color: lightgrey;
+  font-size: 14px;
+  padding: 8px 0px 0px 19px;
+  margin-left: 281px;
+  margin-top: -24px;
+  width:200px;
 }
 input[type=range] {
   -webkit-appearance: none;
