@@ -11,6 +11,9 @@ author: Bayley
     </div>
   </div>
 </div>
+<div id="background">
+  <img src="background.png" style="width: 1034px; position: absolute; top: 47px;">
+</div>
 <div class=top-bar>
   <div class="inner-bar">
       <header>THE GREENHOUSE GAS CRISIS</header>
@@ -150,6 +153,7 @@ author: Bayley
 	   })
      .on("click", function(){
        document.getElementById('cover').style.display = "none";
+       document.getElementById('background').style.display = "none";
      });
 
 
@@ -262,6 +266,7 @@ var DrawCountries = function(y){
       .attr("class", function(d){
         return AllData[name];
       })
+      .transition(500)
 
       .on("click", function(d) {
         var countryCode = num2alpha[d.id];
