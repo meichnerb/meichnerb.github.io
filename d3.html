@@ -26,13 +26,18 @@ author: Bayley
 
 <div class="sidebar">
   <div class="country-info">
-    <p id="Name">
+    <div id="click">
       Click on a country to see data
-    </p>
-    <p id="code">
-    </p>
-    <div id="data">
     </div>
+    <p class="sub-header" id="title">Country</p>
+    <p id="Name" style="color:lightgrey; font-size:13px; margin-top:5px">
+    </p>
+    <p class="sub-header" id="title1">Country Code</p>
+    <p id="code" style="color:lightgrey; font-size:13px; margin-top:5px">
+    </p>
+    <p class="sub-header" id="title2">Data by Year</p>
+    <p id="data" style="color:lightgrey; font-size:13px; margin-top:5px">
+    </p>
   </div>
 </div>
 
@@ -258,9 +263,13 @@ var DrawCountries = function(y){
             return printThis; // <-- to be printed to the div
           }
         console.log("click");
-        document.getElementById('Name').innerHTML = "Country: " + greenhouseData.name;
-        document.getElementById('code').innerHTML = "Country Code: " + greenhouseData.code;
+        document.getElementById('click').innerHTML = " ";
+        document.getElementById('Name').innerHTML = greenhouseData.name;
+        document.getElementById('code').innerHTML = greenhouseData.code;
         document.getElementById('data').innerHTML = print();
+        document.getElementById('title').style.display = "block";
+        document.getElementById('title1').style.display = "block";
+        document.getElementById('title2').style.display = "block";
 
       });
 

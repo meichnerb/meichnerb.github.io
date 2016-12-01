@@ -116,16 +116,29 @@ header {
 }
 
 .country-info {
-  padding-top:20px;
 
   p {
     padding-left:8%;
     padding-right:8%;
     font-family: "HelveticaNeue-CondensedBold";
     font-size:16px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 19px;
+    margin-left: 0;
+    margin-bottom: 0px;
     color:#ffffff;
+  }
+  #click {
+    padding-left:8%;
+    padding-right:8%;
+    font-family: "HelveticaNeue-CondensedBold";
+    font-size:16px;
+    margin-top: 19px;
+    margin-left: 0;
+    margin-bottom: 0px;
+    color:#ffffff;
+  }
+  #title, #title1, #title2 {
+    display:none;
   }
 }
 .top-bar {
@@ -136,10 +149,10 @@ header {
   .gradient {
     width:200px;
     height:20px;
-    background: -webkit-linear-gradient(left, #00ff00, #000000); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(right, #00ff00, #000000); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(right, #00ff00, #000000); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to right, #00ff00, #000000); /* Standard syntax */
+    background: -webkit-linear-gradient(right, #00ff00, #000000); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(left, #00ff00, #000000); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(left, #00ff00, #000000); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to left, #00ff00, #000000); /* Standard syntax */
     margin-top: -19px;
     margin-left: 88px;
   }
