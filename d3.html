@@ -11,8 +11,8 @@ author: Bayley
     </div>
   </div>
 </div>
-<div id="background">
-  <img src="background.png" style="width: 1034px; position: absolute; top: 47px;">
+<div>
+  <img src="background.png" style="width: 1034px; position: absolute; top: 47px;" id="background">
 </div>
 <div class=top-bar>
   <div class="inner-bar">
@@ -266,8 +266,6 @@ var DrawCountries = function(y){
       .attr("class", function(d){
         return AllData[name];
       })
-      .transition(500)
-
       .on("click", function(d) {
         var countryCode = num2alpha[d.id];
         var greenhouseData = AllData[countryCode];
@@ -287,7 +285,6 @@ var DrawCountries = function(y){
         document.getElementById('title').style.display = "block";
         document.getElementById('title1').style.display = "block";
         document.getElementById('title2').style.display = "block";
-        document.getElementById('cover').style.display = "none";
 
       });
 
