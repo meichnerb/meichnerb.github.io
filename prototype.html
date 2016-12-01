@@ -60,8 +60,8 @@ author: Bayley
 
           var enter = circle.enter().append("circle");
           var color = d3.scaleLinear()
-            .domain(["11000", "11500", "12000"])
-            .range(["#354e35", "#356e35" , "#359e35"]);
+            .domain([dataExtent])
+            .range(["#354e35", "#359e35"]);
 
 
           var cx = function(d, i){return 60 + (50 * i);};

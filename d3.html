@@ -3,26 +3,35 @@ layout: default
 author: Bayley
 ---
 
-
-  <div class=top-bar>
-    <div class="inner-bar">
-        <header>THE GREENHOUSE GAS CRISIS</header>
-        <div class="sub-header">A comprehensive look at greenhouse gas emissions by country from 1990 to 2012</div>
-      <div style="margin-left: 264px;margin-top: -24px;">
-        <label for="year" class="year">1990</label>
-        <input type="range" id="slider" style="border-radius:2px">
-        <p class="year-label" id="year" style="margin-left:242px; margin-top:-16px;"></p>
-      </div>
-    </div>
-    <div class="range">
-      <div id="minimum"></div>
-      <div class="gradient"></div>
-      <div id="maximum"></div>
+<div class="cover" id="cover">
+  <div class="over-cover">
+    <div class="arrow_box"></div>
+    <div class="box">
+        Start Here
     </div>
   </div>
+</div>
+<div class=top-bar>
+  <div class="inner-bar">
+      <header>THE GREENHOUSE GAS CRISIS</header>
+      <div class="sub-header">A comprehensive look at greenhouse gas emissions by country from 1990 to 2012</div>
+    <div style="margin-left: 264px;margin-top: -24px" class="slider">
+      <label for="year" class="year">1990</label>
+      <input type="range" id="slider" style="border-radius:2px;">
+      <p class="year-label" id="year" style="margin-left:242px; margin-top:-16px;"></p>
+    </div>
+  </div>
+  <div class="range">
+    <div id="minimum"></div>
+    <div class="gradient"></div>
+    <div id="maximum"></div>
+  </div>
+</div>
 
 
-<svg height=650 width=100% style="margin-left: 2px; margin-top:50px"></svg>
+
+
+<svg id="main" height=650 width=100% style="margin-left: 2px; margin-top:50px;"></svg>
 
 <div class="sidebar">
   <div class="country-info">
@@ -138,7 +147,10 @@ author: Bayley
 		.on("input", function(){
 			DrawCountries(this.value);
       sliderValue.innerHTML = this.value;
-	});
+	   })
+     .on("click", function(){
+       document.getElementById('cover').style.display = "none";
+     });
 
 
 
@@ -270,6 +282,7 @@ var DrawCountries = function(y){
         document.getElementById('title').style.display = "block";
         document.getElementById('title1').style.display = "block";
         document.getElementById('title2').style.display = "block";
+        document.getElementById('cover').style.display = "none";
 
       });
 
