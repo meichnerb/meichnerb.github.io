@@ -269,14 +269,13 @@ var DrawCountries = function(y){
       .on("click", function(d) {
         var countryCode = num2alpha[d.id];
         var greenhouseData = AllData[countryCode];
-        var countryData = JSON.stringify(greenhouseData.years);
         function print(){
           var printThis;
-            for(var i = 0; i < 48; i++){
-              printThis = "\n" + greenhouseData.years[i];
-            }
-            return printThis; // <-- to be printed to the div
+          for(var i = 1990; i <= 1999; i++){
+            printThis = "\n" + greenhouseData.years[i];
           }
+          return printThis; // <-- to be printed to the div
+        }
         console.log("click");
         document.getElementById('click').innerHTML = " ";
         document.getElementById('Name').innerHTML = greenhouseData.name;
@@ -285,7 +284,6 @@ var DrawCountries = function(y){
         document.getElementById('title').style.display = "block";
         document.getElementById('title1').style.display = "block";
         document.getElementById('title2').style.display = "block";
-
       });
 
 
