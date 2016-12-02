@@ -12,7 +12,7 @@ author: Bayley
   </div>
 </div>
 <div>
-  <img src="background.png" style="width: 1034px; position: absolute; top: 47px;" id="background">
+  <img src="background.png" style="width: 1036px; position: fixed; top: 47px" id="background">
 </div>
 <div class=top-bar>
   <div class="inner-bar">
@@ -47,8 +47,8 @@ author: Bayley
     <p class="sub-header" id="title1">Country Code</p>
     <p id="code" style="color:lightgrey; font-size:13px; margin-top:5px">
     </p>
-    <p class="sub-header" id="title2">Data by Year</p>
-    <p id="data" style="color:lightgrey; font-size:13px; margin-top:5px">
+    <p class="sub-header" id="title2">Data by Year (in kt of CO2)</p>
+    <p id="data" style="color:lightgrey; font-size:13px; margin-top:5px; line-height: 18px">
     </p>
   </div>
 </div>
@@ -123,8 +123,8 @@ author: Bayley
 
 						RANGE[1] = Math.min(1000000, RANGE[1]);
 
-            document.getElementById('minimum').innerHTML = RANGE[0];
-            document.getElementById('maximum').innerHTML = RANGE[1] + " kt of CO2";
+            document.getElementById('minimum').innerHTML = "<" + RANGE[0];
+            document.getElementById('maximum').innerHTML = ">" + RANGE[1] + " kt of CO2";
 
 					}
 
@@ -276,11 +276,16 @@ var DrawCountries = function(y){
           }
           return printThis; // <-- to be printed to the div
         }
-        console.log("click");
+        console.log(print);
         document.getElementById('click').innerHTML = " ";
         document.getElementById('Name').innerHTML = greenhouseData.name;
         document.getElementById('code').innerHTML = greenhouseData.code;
-        document.getElementById('data').innerHTML = print();
+        document.getElementById('data').innerHTML = "1990:  " + greenhouseData.years[1990] + "<br/>" + "1991:  " + greenhouseData.years[1991] + "<br/>" + "1992:  " + greenhouseData.years[1992] + "<br/>" + "1993:  " + greenhouseData.years[1993] +
+        "<br/>" + "1994:  " + greenhouseData.years[1994] + "<br/" + "1995:  " + greenhouseData.years[1995] + "<br/>" +  "1996:  " + greenhouseData.years[1996] + "<br/>" +
+        "1997:  " + greenhouseData.years[1997] + "<br/>" + "1998:  Not Available" + "<br/>" + "1999:  Not Available" + "<br/>" + "2000:  " + greenhouseData.years[2000] + "<br/>" + "2001:  Not Available" + "<br/>" + "2002:  " + greenhouseData.years[2002] + "<br/>" +
+        "2003:  " + greenhouseData.years[2003] + "<br/>" + "2004:  " + greenhouseData.years[2004] + "<br/>" + "2005:  " + greenhouseData.years[2005] + "<br/>" + "2006:  " + greenhouseData.years[2006] + "<br/>" +
+        "2007:  " + greenhouseData.years[2007] + "<br/>" + "2008:  " + greenhouseData.years[2008] + "<br/>" + "2009:  " + greenhouseData.years[2009] + "<br/>" + "2010:  " + greenhouseData.years[2010] + "<br/>" +
+        "2011:  " + greenhouseData.years[2011] + "<br/>" + "2012:  " + greenhouseData.years[2012];
         document.getElementById('title').style.display = "block";
         document.getElementById('title1').style.display = "block";
         document.getElementById('title2').style.display = "block";
