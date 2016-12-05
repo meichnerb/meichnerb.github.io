@@ -269,10 +269,15 @@ var DrawCountries = function(y){
       .on("click", function(d) {
         var countryCode = num2alpha[d.id];
         var greenhouseData = AllData[countryCode];
-        function print(){
-          var printThis;
-          for(var i = 1990; i <= 1999; i++){
-            printThis = "\n" + greenhouseData.years[i];
+        function print() {
+          var printThis = "";
+          for(var i = 1990; i <= 2012; i++){
+            if(!greenhouseData.years[i]){
+              printThis += i + ":  " + "Not Available" + "<br/>";
+            }
+            else {
+              printThis += i + ":  " + greenhouseData.years[i] + "<br/>";
+            }
           }
           return printThis; // <-- to be printed to the div
         }
@@ -280,12 +285,13 @@ var DrawCountries = function(y){
         document.getElementById('click').innerHTML = " ";
         document.getElementById('Name').innerHTML = greenhouseData.name;
         document.getElementById('code').innerHTML = greenhouseData.code;
-        document.getElementById('data').innerHTML = "1990:  " + greenhouseData.years[1990] + "<br/>" + "1991:  " + greenhouseData.years[1991] + "<br/>" + "1992:  " + greenhouseData.years[1992] + "<br/>" + "1993:  " + greenhouseData.years[1993] +
-        "<br/>" + "1994:  " + greenhouseData.years[1994] + "<br/" + "1995:  " + greenhouseData.years[1995] + "<br/>" +  "1996:  " + greenhouseData.years[1996] + "<br/>" +
-        "1997:  " + greenhouseData.years[1997] + "<br/>" + "1998:  Not Available" + "<br/>" + "1999:  Not Available" + "<br/>" + "2000:  " + greenhouseData.years[2000] + "<br/>" + "2001:  Not Available" + "<br/>" + "2002:  " + greenhouseData.years[2002] + "<br/>" +
-        "2003:  " + greenhouseData.years[2003] + "<br/>" + "2004:  " + greenhouseData.years[2004] + "<br/>" + "2005:  " + greenhouseData.years[2005] + "<br/>" + "2006:  " + greenhouseData.years[2006] + "<br/>" +
-        "2007:  " + greenhouseData.years[2007] + "<br/>" + "2008:  " + greenhouseData.years[2008] + "<br/>" + "2009:  " + greenhouseData.years[2009] + "<br/>" + "2010:  " + greenhouseData.years[2010] + "<br/>" +
-        "2011:  " + greenhouseData.years[2011] + "<br/>" + "2012:  " + greenhouseData.years[2012];
+        d3.select('#data').html(print())
+        // document.getElementById('data').innerHTML = "1990:  " + greenhouseData.years[1990] + "<br/>" + "1991:  " + greenhouseData.years[1991] + "<br/>" + "1992:  " + greenhouseData.years[1992] + "<br/>" + "1993:  " + greenhouseData.years[1993] +
+        // "<br/>" + "1994:  " + greenhouseData.years[1994] + "<br/" + "1995:  " + greenhouseData.years[1995] + "<br/>" +  "1996:  " + greenhouseData.years[1996] + "<br/>" +
+        // "1997:  " + greenhouseData.years[1997] + "<br/>" + "1998:  Not Available" + "<br/>" + "1999:  Not Available" + "<br/>" + "2000:  " + greenhouseData.years[2000] + "<br/>" + "2001:  Not Available" + "<br/>" + "2002:  " + greenhouseData.years[2002] + "<br/>" +
+        // "2003:  " + greenhouseData.years[2003] + "<br/>" + "2004:  " + greenhouseData.years[2004] + "<br/>" + "2005:  " + greenhouseData.years[2005] + "<br/>" + "2006:  " + greenhouseData.years[2006] + "<br/>" +
+        // "2007:  " + greenhouseData.years[2007] + "<br/>" + "2008:  " + greenhouseData.years[2008] + "<br/>" + "2009:  " + greenhouseData.years[2009] + "<br/>" + "2010:  " + greenhouseData.years[2010] + "<br/>" +
+        // "2011:  " + greenhouseData.years[2011] + "<br/>" + "2012:  " + greenhouseData.years[2012];
         document.getElementById('title').style.display = "block";
         document.getElementById('title1').style.display = "block";
         document.getElementById('title2').style.display = "block";
