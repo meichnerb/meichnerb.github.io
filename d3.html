@@ -12,7 +12,7 @@ author: Bayley
   </div>
 </div>
 <div>
-  <img src="background1.png" style="width: 1035px; position: fixed; top: 47px; left:-1px;" id="background">
+  <img src="background2.png" style="width: 1097px; position: fixed; top: 48px; left:-1px;" id="background">
 </div>
 <div class=top-bar>
   <div class="inner-bar">
@@ -165,7 +165,7 @@ author: Bayley
 //      Draw
 // --------------
 
-var colours = ["#00ff00", "#00cc00", "#009900", "#006600", "#003300", "#000000"];
+var colours = ["#35ba04", "#ba1504"];
 
 
 
@@ -184,8 +184,8 @@ var DrawCountries = function(y){
       .attr("width","100%");
 		var cx = function(d, i) {        return 30 + (30*(i%25));      };
 		var cy = function(d, i) {        return 30 + (30 * Math.floor(i/25))      };
-		var color = d3.scaleOrdinal()
-						  .domain([0,6])
+		var color = d3.scaleLinear()
+						  .domain([RANGE[0], 2000000])
 						  .range(colours);
 
 
@@ -247,7 +247,7 @@ var DrawCountries = function(y){
           // -- Get Log Value And Color
       var logValue = Math.floor(Math.log10(pollution));
             // console.log("pollution: ", pollution, 'log: ', logValue);
-      return color(logValue);
+      return color(pollution);
 
           // -- Alternative Color Test
             /*var percent = logValue/6;

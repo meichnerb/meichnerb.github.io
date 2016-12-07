@@ -163,10 +163,10 @@ header {
   .gradient {
     width:200px;
     height:20px;
-    background: -webkit-linear-gradient(right, #00ff00, #000000); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(left, #00ff00, #000000); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(left, #00ff00, #000000); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to left, #00ff00, #000000); /* Standard syntax */
+    background: -webkit-linear-gradient(left, #35ba04, #ba1504); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #35ba04, #ba1504); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #35ba04, #ba1504); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #35ba04, #ba1504); /* Standard syntax */
     margin-top: -19px;
     margin-left: 92px;
   }
@@ -203,7 +203,7 @@ input[type=range]::-webkit-slider-runnable-track {
   height: 6px;
   cursor: pointer;
   animate: 0.2s;
-  background: #009900;
+  background: grey;
   border-radius: 2px;
 }
 input[type=range]::-webkit-slider-thumb {
@@ -216,14 +216,14 @@ input[type=range]::-webkit-slider-thumb {
   margin-top: -5px;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #009900;
+  background: grey;
 }
 input[type=range]::-moz-range-track {
   width: 100%;
   height: 6px;
   cursor: pointer;
   animate: 0.2s;
-  background: #009900;
+  background: grey;
   border-radius: 2px;
 }
 input[type=range]::-moz-range-thumb {
@@ -240,7 +240,7 @@ input[type=range]::-ms-track {
   height: 6px;
   cursor: pointer;
   animate: 0.2s;
-  background: #009900;
+  background: grey;
   border-radius: 2px;
 }
 input[type=range]::-ms-fill-lower {
